@@ -1,0 +1,18 @@
+info:
+  id: ${spring.application.name}
+
+server:
+  port: 8000
+
+eureka:
+  client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
+        registerWithEureka: false
+        fetchRegistry: false
+
+zuul:
+  ignored-services: '*'
+  routes:
+    user-service: /users/**
+    product-service: /products/**
