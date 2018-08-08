@@ -2,7 +2,7 @@ info:
   id: ${spring.application.name}
 
 server:
-  port: 8000
+  port: 8082
 
 eureka:
   client:
@@ -11,9 +11,7 @@ eureka:
         registerWithEureka: false
         fetchRegistry: false
 
-zuul:
-  ignored-services: '*'
-  routes:
-    user-service: /user-service/**
-    product-service: /product-service/**
-    order-service: /order-service/**
+spring:
+  data:
+    rest:
+      base-path: /

@@ -2,7 +2,7 @@ info:
   id: ${spring.application.name}
 
 server:
-  port: 8082
+  port: 8071
 
 eureka:
   client:
