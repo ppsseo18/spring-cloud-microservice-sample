@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @Value("${spring.application.name}")
-    String hostname;
+    @Value("${server.port}")
+    String port;
 
     @GetMapping("/")
     public String userHome() {
-        return hostname;
+        return port;
     }
 }
