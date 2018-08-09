@@ -10,3 +10,10 @@ eureka:
         defaultZone: http://localhost:8761/eureka/
         registerWithEureka: false
         fetchRegistry: false
+
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: product
