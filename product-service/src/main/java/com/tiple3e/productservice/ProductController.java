@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -12,6 +13,16 @@ public class ProductController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    WebClient.Builder webClientBuilder;
+
+    @GetMapping("/user")
+    public Mono<String> getUserTest() {
+        return webClientBuilder.build().get().uri("http://user-service/")
+                .retrieve()
+                .bodyToMono(String.class);
+    }
 
     @GetMapping("/products")
     public Flux<Product> getAllProducts() {
