@@ -11,8 +11,17 @@ public class OrderController {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    EventPublisher eventPublisher;
+
     @GetMapping("/")
     public String getOrder() {
         return restTemplate.getForObject("http://user-service/", String.class);
+    }
+
+    @GetMapping("/send")
+    public String sendOrder() {
+        eventPublisher.publish("send order!");
+        return "success";
     }
 }
