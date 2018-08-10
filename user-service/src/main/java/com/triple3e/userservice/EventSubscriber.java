@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EventSubscriber {
+
     @RabbitListener(queues = "OrderQ")
     public void subscribe(String content) {
         System.out.println(content);

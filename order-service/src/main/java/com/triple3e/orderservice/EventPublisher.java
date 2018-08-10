@@ -18,6 +18,6 @@ public class EventPublisher {
     }
 
     public void publish(String message) {
-        template.convertAndSend("TestQ", message);
+        template.convertAndSend("OrderQ", message);
     }
 }
