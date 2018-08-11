@@ -22,3 +22,9 @@ spring:
       bindings:
         orderQ:
           destination: orderQ
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream
