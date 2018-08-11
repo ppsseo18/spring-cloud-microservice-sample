@@ -41,6 +41,18 @@ public class ProductController {
         return productRepository.save(product);
     }
 
+    @PutMapping("/products/{id}")
+    public Mono<ResponseEntity<Product>> editProduct(@PathVariable(value = "id") String id, @RequestBody Product product) {
+        return productRepository.findById(id)
+                .flatMap(existProduct -> {
+                    existProduct.setName(product.getName());
+                    existProduct.setPrice(product.getPrice());
+                    existProduct.setQuantity(product.getQuantity());
+                    return productRepository.save(existProduct);
+                }).map(updatedProduct -> ResponseEntity.ok(updatedProduct))
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/products/{id}")
     public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable(value = "id") String id) {
         return productRepository.findById(id)
