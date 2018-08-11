@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @RibbonClient(name = "user-service")
-public class Config {
+public class HttpConfig {
 
     @LoadBalanced
     @Bean

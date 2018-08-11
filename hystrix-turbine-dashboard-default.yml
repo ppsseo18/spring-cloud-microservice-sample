@@ -1,0 +1,14 @@
+info:
+  id: ${spring.application.name}
+
+server:
+  port: 9090
+
+spring:
+  turbine:
+    clusterNameExpression: new String('default')
+    appConfig: order-service
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
