@@ -73,14 +73,4 @@ public class ProductController {
                 )
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-    @DeleteMapping("/products/{id}/quantity")
-    public Mono<ResponseEntity<Void>> deleteProductQuantity(@PathVariable(value = "id") String id, @RequestBody Map<String, Integer> requestBody) {
-        return productRepository.findById(id)
-                .flatMap(product -> {
-                    product.setQuantity(product.getQuantity() - requestBody.get("quantity"));
-                    return productRepository.save(product);
-                }).map(updatedProduct -> new ResponseEntity<Void>(HttpStatus.OK))
-                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
 }

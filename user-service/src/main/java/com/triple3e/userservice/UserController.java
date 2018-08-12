@@ -64,14 +64,4 @@ public class UserController {
         }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("users/{id}/points")
-    public ResponseEntity<Void> deleteUserPoints(@PathVariable(value = "id") String id, @RequestBody Map<String, Integer> requestBody) {
-        return userRepository.findById(id).map(user -> {
-            user.setPoints(user.getPoints() - requestBody.get("points"));
-            userRepository.save(user);
-            return new ResponseEntity(HttpStatus.OK);
-        }).orElse(new ResponseEntity(HttpStatus.NOT_FOUND));
-    }
-
-
 }
