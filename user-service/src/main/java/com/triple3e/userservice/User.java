@@ -16,9 +16,10 @@ public class User {
 
     private Integer points;
 
-    public User(String id, String name) {
+    public User(String id, String name, Integer points) {
         this.id = id;
         this.name = name;
+        this.points = points;
     }
 
 }

@@ -12,9 +12,6 @@ eureka:
         fetchRegistry: false
 
 spring:
-  data:
-    rest:
-      base-path: /
   rabbitmq:
     host: localhost
     port: 5672
