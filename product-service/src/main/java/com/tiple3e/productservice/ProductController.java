@@ -8,6 +8,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @RestController
 public class ProductController {
 
@@ -33,7 +35,7 @@ public class ProductController {
     public Mono<ResponseEntity<Product>> getProductById(@PathVariable(value = "id") String id) {
         return productRepository.findById(id)
                 .map(product -> ResponseEntity.ok(product))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/products")
@@ -42,23 +44,43 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public Mono<ResponseEntity<Product>> editProduct(@PathVariable(value = "id") String id, @RequestBody Product product) {
+    public Mono<ResponseEntity<Void>> updateProduct(@PathVariable(value = "id") String id, @RequestBody Product requestProduct) {
         return productRepository.findById(id)
-                .flatMap(existProduct -> {
-                    existProduct.setName(product.getName());
-                    existProduct.setPrice(product.getPrice());
-                    existProduct.setQuantity(product.getQuantity());
-                    return productRepository.save(existProduct);
-                }).map(updatedProduct -> ResponseEntity.ok(updatedProduct))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .flatMap(product -> {
+                    product.setName(requestProduct.getName());
+                    product.setPrice(requestProduct.getPrice());
+                    product.setQuantity(requestProduct.getQuantity());
+                    return productRepository.save(product);
+                }).map(updatedProduct -> new ResponseEntity<Void>(HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PatchMapping("/products/{id}/quantity")
+    public Mono<ResponseEntity<Void>> updateProductQuantity(@PathVariable(value = "id") String id, @RequestBody Map<String, Integer> requestBody) {
+        return productRepository.findById(id)
+                .flatMap(product -> {
+                    product.setQuantity(product.getQuantity() + requestBody.get("quantity"));
+                    return productRepository.save(product);
+                }).map(updatedProduct -> new ResponseEntity<Void>(HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/products/{id}")
     public Mono<ResponseEntity<Void>> deleteProduct(@PathVariable(value = "id") String id) {
         return productRepository.findById(id)
                 .flatMap(product ->
-                    productRepository.delete(product).then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
+                        productRepository.delete(product).then(Mono.just(new ResponseEntity<Void>(HttpStatus.OK)))
                 )
+                .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/products/{id}/quantity")
+    public Mono<ResponseEntity<Void>> deleteProductQuantity(@PathVariable(value = "id") String id, @RequestBody Map<String, Integer> requestBody) {
+        return productRepository.findById(id)
+                .flatMap(product -> {
+                    product.setQuantity(product.getQuantity() - requestBody.get("quantity"));
+                    return productRepository.save(product);
+                }).map(updatedProduct -> new ResponseEntity<Void>(HttpStatus.OK))
                 .defaultIfEmpty(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
