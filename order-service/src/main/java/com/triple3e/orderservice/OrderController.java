@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
@@ -19,10 +20,18 @@ public class OrderController {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @GetMapping("/send")
     public String sendOrder() {
         eventPublisher.publish("send order!");
         return "success";
+    }
+
+    @GetMapping("/users")
+    public String getUser() {
+        return restTemplate.getForObject("http://user-service/", String.class);
     }
 
     @GetMapping("/products/{id}")
